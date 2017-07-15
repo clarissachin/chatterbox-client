@@ -1,25 +1,31 @@
 // YOUR CODE HERE:
+
+// Rooms
+// [1] Allow users to create rooms and enter existing rooms - Rooms are defined by the .roomname property of messages, so you'll need to filter them somehow.
+// Socializing
+// [2] Allow users to 'befriend' other users by clicking on their user name
+// [2a] Display all messages sent by friends in bold
+
 var messages = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=10000';
 // var messagesTwo = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/roomName/messages';
 // POST request
-$(document).on("ready", function() {
+$(document).on('ready', function() {
   var $getRequest = function() {
     $.ajax({
-    url: messages,
-    method:'GET',
-    dataType: 'json',
-    success: onSuccess
-  });
-  }
+      url: messages,
+      method:'GET',
+      dataType: 'json',
+      success: onSuccess
+    });
+  };
 
-$("button").click(function() {
-    var msgText = $("#inputMsg").val();
-    // console.log(msgText);
+  $('button').click(function() {
+    var msgText = $('#inputMsg').val();
     var jsonObj = {
-      roomname: 'jason Tester',
+      roomname: 'Clarissa is pretty Bae.',
       text: msgText,
-      username: 'clarissa2'
-    }
+      username: 'The Ghost of all white Fred'
+    };
     $.ajax({
       url: messages,
       type:'POST',
@@ -28,46 +34,33 @@ $("button").click(function() {
       success: postSuccess,
       error: handleError
     });
-    // console.log('msgText is', msgText);
-    // $('form').trigger('reset');
+    $('form').trigger('reset');
   });
 
-//   var postRequest = $.ajax({
-//     url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes',
-//     type:'POST',
-//     data: $("#inputMsg").val(),
-//     contentType: 'application/json',
-//     success: postSuccess,
-// });
-
-  function handleError(data) {
-    console.log('shhh');
+  var handleError = function(data) {
     console.log('data is', data);
-  }
-  function onSuccess(json) {
+  };
+  var onSuccess = function(json) {
     var jsonArray = json.results;
-    // console.log('json', jsonArray);
-    for (var i = 5339; i < jsonArray.length; i++) {
-      // if(jsonArray[i]['username']==='clarissa2'){
-        console.log(jsonArray[i]);
-      // }
+    $('#info').append(json);
+    $('#chats1').append('<p>' + json + '</p>');
+    for (var i = jsonArray.length-50; i < jsonArray.length; i++) {
+      var msg = JSON.stringify(jsonArray[i]['text']);
+      if (msg !== undefined && !msg.includes('<')) {
+        $('#chatBox').append('<p>' + i + '--' + msg + '</p>');
+      } else {
+        console.log('saved you: a threat was found');
+      }
     }
-    $("#info").append(json);
-    $("#chats1").append("<p>" + json + "</p>");
-    console.log('jsonArray.length is', jsonArray.length);
-    for (var i = 0; i < jsonArray.length; i++) {
-        var msg = (jsonArray[i]['text']);
-        $("#chatBox").append("<p>" + i + "--" + msg + "</p>");
-    }
-   }
+  };
 
-   function postSuccess(data) {
-     console.log('postSuccess reached! data is', data);
-     $getRequest();
+  var postSuccess = function(data) {
+    console.log('postSuccess reached! data is', data);
+    $getRequest();
     //  postRequest.done(function(postMsg) {
-      //  $('body').append("<p>" + data + "</p>");
+      //  $('body').append('<p>' + data + '</p>');
     //  });
-   }
+  };
 
   // function postSuccess(json)
 });
