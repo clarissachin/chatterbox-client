@@ -13,22 +13,23 @@ $(document).on("ready", function() {
   }
 
 $("button").click(function() {
-    var msgText = $("#inputMsg").serialize()
+    var msgText = $("#inputMsg").val();
     // console.log(msgText);
     var jsonObj = {
       roomname: 'jason Tester',
       text: msgText,
-      username: 'clarissa'
+      username: 'clarissa2'
     }
     $.ajax({
       url: messages,
       type:'POST',
       data:jsonObj,
-      contentType: 'text',
+      dataType: 'json',
       success: postSuccess,
       error: handleError
     });
-    // $('form').trigger('reset')
+    // console.log('msgText is', msgText);
+    // $('form').trigger('reset');
   });
 
 //   var postRequest = $.ajax({
@@ -46,10 +47,10 @@ $("button").click(function() {
   function onSuccess(json) {
     var jsonArray = json.results;
     // console.log('json', jsonArray);
-    for (var i = 5000; i < jsonArray.length; i++) {
-      if(jsonArray[i]['username']==='clarissa'){
+    for (var i = 5339; i < jsonArray.length; i++) {
+      // if(jsonArray[i]['username']==='clarissa2'){
         console.log(jsonArray[i]);
-      }
+      // }
     }
     $("#info").append(json);
     $("#chats1").append("<p>" + json + "</p>");
