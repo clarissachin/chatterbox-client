@@ -19,12 +19,14 @@ $(document).on('ready', function() {
     });
   };
 
-  $('button').click(function() {
+  $('#submitText').click(function() {
     var msgText = $('#inputMsg').val();
+    var userName = $('#userName').val();
+    var roomName = $('#createRoom').val();
     var jsonObj = {
-      roomname: 'Clarissa is pretty Bae.',
+      roomname: roomName,
       text: msgText,
-      username: 'The Ghost of all white Fred'
+      username: userName
     };
     $.ajax({
       url: messages,
@@ -46,8 +48,8 @@ $(document).on('ready', function() {
     $('#chats1').append('<p>' + json + '</p>');
     for (var i = jsonArray.length - 50; i < jsonArray.length; i++) {
       var msg = JSON.stringify(jsonArray[i]['text']);
-      if (msg !== undefined && !msg.includes('<')) {
-        $('#chatBox').append('<p>' + i + '--' + msg + '</p>');
+      if (msg !== undefined && !msg.includes('<') && jsonArray[i]['text'].length!==0) {
+        $('#chatBox').append('<p>' + msg + '-  ' + jsonArray[i]['username'] + '</p>');
       } else {
         console.log('saved you: a threat was found');
       }
