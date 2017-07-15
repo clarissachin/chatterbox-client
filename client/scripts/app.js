@@ -13,7 +13,7 @@ $(document).on('ready', function() {
   var $getRequest = function() {
     $.ajax({
       url: messages,
-      method:'GET',
+      method: 'GET',
       dataType: 'json',
       success: onSuccess
     });
@@ -28,8 +28,8 @@ $(document).on('ready', function() {
     };
     $.ajax({
       url: messages,
-      type:'POST',
-      data:jsonObj,
+      type: 'POST',
+      data: jsonObj,
       dataType: 'json',
       success: postSuccess,
       error: handleError
@@ -44,7 +44,7 @@ $(document).on('ready', function() {
     var jsonArray = json.results;
     $('#info').append(json);
     $('#chats1').append('<p>' + json + '</p>');
-    for (var i = jsonArray.length-50; i < jsonArray.length; i++) {
+    for (var i = jsonArray.length - 50; i < jsonArray.length; i++) {
       var msg = JSON.stringify(jsonArray[i]['text']);
       if (msg !== undefined && !msg.includes('<')) {
         $('#chatBox').append('<p>' + i + '--' + msg + '</p>');
