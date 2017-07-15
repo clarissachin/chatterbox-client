@@ -7,8 +7,8 @@
 // [2a] Display all messages sent by friends in bold
 
 var messages = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=10000';
-// var messagesTwo = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/roomName/messages';
-// POST request
+window.roomName = [];
+// GET request
 $(document).on('ready', function() {
   var $getRequest = function() {
     $.ajax({
@@ -18,15 +18,19 @@ $(document).on('ready', function() {
       success: onSuccess
     });
   };
-
+//POST request
   $('#submitText').click(function() {
     var msgText = $('#inputMsg').val();
     var userName = $('#userName').val();
-    var roomName = $('#createRoom').val();
+    var roomName = $('#roomName').val();
+    window.roomName.push(roomName);
+    // console.log('window.roomName is', window.roomName);
+    var friends = [];
     var jsonObj = {
       roomname: roomName,
       text: msgText,
-      username: userName
+      username: userName,
+      friends: friends
     };
     $.ajax({
       url: messages,
@@ -39,40 +43,44 @@ $(document).on('ready', function() {
     $('form').trigger('reset');
   });
 
-  var handleError = function(data) {
-    console.log('data is', data);
-  };
+
+  $('#submitText').click(function() {
+    console.log('roomName is', window.roomName[0]);
+  });
+  $('')
   var onSuccess = function(json) {
     var jsonArray = json.results;
     $('#info').append(json);
     $('#chats1').append('<p>' + json + '</p>');
-    for (var i = jsonArray.length - 50; i < jsonArray.length; i++) {
-      var msg = JSON.stringify(jsonArray[i]['text']);
-      if (msg !== undefined && !msg.includes('<') && jsonArray[i]['text'].length!==0) {
-        $('#chatBox').append('<p>' + msg + '-  ' + jsonArray[i]['username'] + '</p>');
-      } else {
-        console.log('saved you: a threat was found');
+    if (window.roomName[window.roomName.length - 1] !== undefined) {
+      $('#chatBox').remove();
+      $('body').append('<div id="chatBox"></div>');
+      for (var i = jsonArray.length - 300; i < jsonArray.length; i++) {
+        if (jsonArray[i]['roomname'] === window.roomName[window.roomName.length - 1]) {
+          var msg = JSON.stringify(jsonArray[i]['text']);
+          if (msg !== undefined && !msg.includes('<') && jsonArray[i]['text'].length!==0) {
+            $('#chatBox').append('<p>' + msg + '-  ' + '<a href= "#" id= "userNameTag">' + jsonArray[i]['username'] + '</a></p>');
+          } else {
+            console.log('saved you: a threat was found');
+          }
+        }
+      }
+    } else {
+      for (var k = jsonArray.length - 50; k < jsonArray.length; k++) {
+        var msg = JSON.stringify(jsonArray[k]['text']);
+        if (msg !== undefined && !msg.includes('<') && jsonArray[k]['text'].length!==0) {
+          $('#chatBox').append('<p>' + msg + '-  ' + jsonArray[k]['username'] + '</p>');
+        } else {
+          console.log('saved you: a threat was found');
+        }
       }
     }
+    return json;
   };
-
   var postSuccess = function(data) {
-    console.log('postSuccess reached! data is', data);
     $getRequest();
-    //  postRequest.done(function(postMsg) {
-      //  $('body').append('<p>' + data + '</p>');
-    //  });
   };
-
-  // function postSuccess(json)
+  var handleError = function(data) {
+    console.log('Post failed.');
+  };
 });
-
-
-//
-
-
-
-// var message = {
-//   username: 'json lee',
-//   text: 'ssssssuuuuuhhh dude',
-// };
