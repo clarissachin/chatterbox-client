@@ -51,16 +51,16 @@ $(document).on('ready', function() {
     var txt = $(this).text();
     for (var i = 0; i < window.jsonObj.length; i++) {
       var username = window.jsonObj[i]['username'];
-      if (username.length >= 1 && username === txt && window.friends.indexOf(username) === -1) {
+      if (username === txt && window.friends.indexOf(username) === -1) {
         window.friends.push(username);
       }
     }
+    // console.log(window.friends);
     // console.log('ive been clicked'+ window.jsonObj[0]);
   });
   var onSuccess = function(json) {
     var jsonArray = json.results;
     window.jsonObj = jsonArray;
-    console.log(jsonArray);
     $('#info').append(json);
     $('#chats1').append('<p>' + json + '</p>');
     if (window.roomName[window.roomName.length - 1] !== undefined) {
@@ -70,7 +70,11 @@ $(document).on('ready', function() {
         if (jsonArray[i]['roomname'] === window.roomName[window.roomName.length - 1]) {
           var msg = JSON.stringify(jsonArray[i]['text']);
           if (msg !== undefined && !msg.includes('<') && jsonArray[i]['text'].length!==0) {
-            $('#chatBox').append('<p>' + msg + '-  ' + '<a href= "#" class= "userNameTag">' + jsonArray[i]['username'] + '</a></p>');
+            if (window.friends.indexOf(jsonArray[i]['username']) !== -1) {
+              $('#chatBox').append('<p><strong>' + msg + '-  ' + '</strong><a href= "#" class= "userNameTag">' + jsonArray[i]['username'] + '</a></p>');
+            } else {
+              $('#chatBox').append('<p>' + msg + '-  ' + '<a href= "#" class= "userNameTag">' + jsonArray[i]['username'] + '</a></p>');
+            }
           } else {
             console.log('saved you: a threat was found');
           }
