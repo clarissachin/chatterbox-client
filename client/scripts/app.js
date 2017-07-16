@@ -6,7 +6,7 @@
 // [2] Allow users to 'befriend' other users by clicking on their user name
 // [2a] Display all messages sent by friends in bold
 
-var messages = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=100';
+var messages = 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages?limit=1000';
 window.roomName = [];
 window.friends = [];
 window.jsonObj = [];
@@ -61,12 +61,13 @@ $(document).on('ready', function() {
   var onSuccess = function(json) {
     var jsonArray = json.results;
     window.jsonObj = jsonArray;
+    // console.log(jsonArray);
     $('#info').append(json);
     $('#chats1').append('<p>' + json + '</p>');
     if (window.roomName[window.roomName.length - 1] !== undefined) {
       $('#chatBox').remove();
       $('body').append('<div id="chatBox"></div>');
-      for (var i = jsonArray.length - 100; i < jsonArray.length; i++) {
+      for (var i = jsonArray.length - 1000; i < jsonArray.length; i++) {
         if (jsonArray[i]['roomname'] === window.roomName[window.roomName.length - 1]) {
           var msg = JSON.stringify(jsonArray[i]['text']);
           if (msg !== undefined && !msg.includes('<') && jsonArray[i]['text'].length!==0) {
@@ -81,7 +82,7 @@ $(document).on('ready', function() {
         }
       }
     } else {
-      for (var k = jsonArray.length - 50; k < jsonArray.length; k++) {
+      for (var k = jsonArray.length - 1000; k < jsonArray.length; k++) {
         var msg = JSON.stringify(jsonArray[k]['text']);
         if (msg !== undefined && !msg.includes('<') && jsonArray[k]['text'].length!==0) {
           $('#chatBox').append('<p>' + msg + '-  ' + jsonArray[k]['username'] + '</p>');
